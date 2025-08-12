@@ -1,15 +1,28 @@
 package org.example;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 
 public class UndoableStringBuilder {
-    private StringBuilder stringBuilder; //
-    private Stack<String> history;
+    private static final int DEFAULT_HISTORY_SIZE = 10;
+
+    private final StringBuilder stringBuilder; //
+    private final Deque<String> history;
+    private final int maxHistorySize;
+
+    public UndoableStringBuilder(int maxHistorySize) {
+        if (maxHistorySize < 1) {
+            throw new IllegalArgumentException("maxHistorySize должен быть >= 1");
+        }
+        this.stringBuilder = new StringBuilder();
+        this.history = new ArrayDeque<>();
+        this.maxHistorySize = maxHistorySize;
+        saveSnapshot();
+    }
 
     public UndoableStringBuilder() {
-        this.stringBuilder = new StringBuilder();
-        this.history = new Stack<>();
-        saveSnapshot();
+        this(DEFAULT_HISTORY_SIZE);
     }
 
     private void saveSnapshot() {
@@ -18,8 +31,9 @@ public class UndoableStringBuilder {
 
     public void undo() {
         if (history.size() > 1) {
-            history.pop(); //
-            stringBuilder = new StringBuilder(history.peek());
+            history.pop();
+            stringBuilder.setLength(0);
+            stringBuilder.append(history.peek());
         }
     }
 
