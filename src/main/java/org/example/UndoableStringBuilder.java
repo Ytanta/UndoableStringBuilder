@@ -7,7 +7,7 @@ import java.util.Deque;
 public class UndoableStringBuilder {
     private static final int DEFAULT_HISTORY_SIZE = 10;
 
-    private final StringBuilder stringBuilder; //
+    private final StringBuilder stringBuilder;
     private final Deque<String> history;
     private final int maxHistorySize;
 
